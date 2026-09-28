@@ -11,21 +11,15 @@ jobs:
       - name: Checkout App Dumper
         uses: actions/checkout@v4
 
-      - name: Install current Scene Collective PS4 SDK
-        run: |
-          git clone https://github.com/Scene-Collective/ps4-payload-sdk ~/ps4-payload-sdk
-          cd ~/ps4-payload-sdk
-          chmod +x install.sh
-          sudo ./install.sh
+      - name: Build with current PS4 Payload SDK
+        uses: Scene-Collective/ps4-payload-sdk@v1
+        with:
+          app_path: .
+          build_command: make
 
-      - name: Build App Dumper
-        run: |
-          export PS4SDK=/opt/ps4sdk
-          make
-
-      - name: Upload compiled payload
+      - name: Upload App Dumper
         uses: actions/upload-artifact@v4
         with:
-          name: ps4-app-dumper-current-sdk
+          name: ps4-app-dumper
           path: "*.bin"
           if-no-files-found: error
